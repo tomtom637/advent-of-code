@@ -1,4 +1,4 @@
-import { convertStringInputToArray } from "./utils.ts";
+import { convertStringInputToMatrix } from "./utils.ts";
 
 const exampleInputString = `00100
 11110
@@ -13,7 +13,7 @@ const exampleInputString = `00100
 00010
 01010`;
 
-export const exampleInput = convertStringInputToArray(exampleInputString);
+export const exampleInput = convertStringInputToMatrix(exampleInputString);
 
 const inputString = `101010011010
 101111111001
@@ -1016,4 +1016,4 @@ const inputString = `101010011010
 000110000010
 000001101000`;
 
-export const input = convertStringInputToArray(inputString);
+export const input = convertStringInputToMatrix(inputString);
