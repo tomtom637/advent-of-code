@@ -1,11 +1,21 @@
-import { convertStringInputToMatrix } from "./utils.ts";
+import { convertStringInputToArray } from "../01/utils.ts";
 
 const exampleInputString = `1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet`;
 
-export const exampleInput = convertStringInputToMatrix(exampleInputString);
+export const exampleInput = convertStringInputToArray(exampleInputString);
+
+const exampleInputString2 = `two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen`;
+
+export const exampleInput2 = convertStringInputToArray(exampleInputString2);
 
 const inputString = `threehqv2
 sxoneightoneckk9ldctxxnffqnzmjqvj
@@ -1008,4 +1018,4 @@ eightndxxqxtwo3cqz47
 fiveeight792eightqskstrftdpccsrgskrhc
 26fmrrhhpthree6b`;
 
-export const input = convertStringInputToMatrix(inputString);
+export const input = convertStringInputToArray(inputString);
