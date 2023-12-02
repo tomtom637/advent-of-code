@@ -20,6 +20,7 @@ export function getColorsFromHandful(handful: string) {
       case "blue":
         blue += parseInt(color.split(" ")[0]);
         break;
+      default: break;
     }
   });
   return { red, green, blue };
