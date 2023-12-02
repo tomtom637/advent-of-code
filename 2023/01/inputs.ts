@@ -1,4 +1,4 @@
-import { convertStringInputToArray } from "../01/utils.ts";
+import { convertStringInputToArray } from "./utils.ts";
 
 const exampleInputString = `1abc2
 pqr3stu8vwx
