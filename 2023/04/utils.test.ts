@@ -2,6 +2,7 @@ import { assertEquals } from "https://deno.land/std@0.206.0/assert/mod.ts";
 
 import {
   convertInputToArray,
+  getNumbersFromString,
   getCardInfo,
   getPoints,
   getScratchcardsAmount,
@@ -15,6 +16,13 @@ Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19`;
     "Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19",
   ];
   const actual = convertInputToArray(input);
+  assertEquals(actual, expected);
+});
+
+Deno.test("getNumbersFromString", () => {
+  const input = "  2 3  8 6754  78";
+  const expected = [2, 3, 8, 6754, 78];
+  const actual = getNumbersFromString(input);
   assertEquals(actual, expected);
 });
 

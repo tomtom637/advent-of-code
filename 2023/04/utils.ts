@@ -3,19 +3,21 @@ export function convertInputToArray(input: string) {
   return input.split("\n");
 }
 
+/** Retrieves an array of numbers in a string */
+export function getNumbersFromString(input: string) {
+  return input
+    .split(" ")
+    .map(n => parseInt(n))
+    .filter(n => !isNaN(n));
+}
+
 /** Retrieves a scratchcard information */
 export function getCardInfo(card: string) {
   const [cardNumber, cardValues] = card.split(":");
-  const [, cardId] = cardNumber.split(" ");
+  const cardId = cardNumber.replace("Card ", "").trim();
   const [winningNumbers, scratchNumbers] = cardValues.split("|");
-  const winning = winningNumbers
-    .split(" ")
-    .map(n => parseInt(n))
-    .filter(n => !isNaN(n));
-  const scratch = scratchNumbers
-    .split(" ")
-    .map(n => parseInt(n))
-    .filter(n => !isNaN(n));
+  const winning = getNumbersFromString(winningNumbers);
+  const scratch = getNumbersFromString(scratchNumbers);
   return { cardId, winning, scratch };
 }
 
@@ -55,13 +57,13 @@ export function getScratchcardsAmount(input: string[]) {
   });
   for (let i = 0; i < input.length; i++) {
     const { winning, scratch } = getCardInfo(input[i]);
-    const winningNumbers = [];
+    const winningNumbers = new Set<number>();
     for (const number of winning) {
       if (scratch.includes(number)) {
-        winningNumbers.push(number);
+        winningNumbers.add(number);
       }
     }
-    for (let j = 1; j <= winningNumbers.length; j++) {
+    for (let j = 1; j <= winningNumbers.size; j++) {
       if (i + j < input.length) {
         const currentCard = scratchcards.find(
           c => c.id === getCardInfo(input[i]).cardId
