@@ -2,8 +2,7 @@ import { exampleInput, input } from "./inputs.ts";
 import {
   validateFullCategory,
   resolveSeedsRange,
-  validateCategoryLineWithSeedRange,
-  getSDR,
+  validateFullCategoryWithSeedRange,
 } from "./utils.ts";
 
 type Input = typeof input;
@@ -38,13 +37,13 @@ export function partTwo(input: Input) {
 
   for (const seed of seedsRange) {
     const { start: seedStart, range: seedRange } = seed;
-    const firstCategorySDRs = input[categories[0]].map(getSDR);
 
-    const firstCategoryOutput = firstCategorySDRs.map(line => {
-      return validateCategoryLineWithSeedRange({ seedStart, seedRange }, line);
-    });
+    const firstCategoryOutput = validateFullCategoryWithSeedRange(
+      { seedStart, seedRange },
+      input[categories[0]],
+    );
 
-    let seedValue = Math.min(...firstCategoryOutput);
+    let seedValue = firstCategoryOutput;
 
     for (let i = 1; i < categories.length; i++) {
       seedValue = validateFullCategory(input[categories[i]], seedValue);

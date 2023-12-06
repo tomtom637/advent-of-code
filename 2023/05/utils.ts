@@ -94,6 +94,24 @@ export function validateFullCategory(
   return seedValue;
 }
 
+export function validateFullCategoryWithSeedRange(
+  seedRange: { seedStart: number; seedRange: number },
+  category: CategoryLine,
+) {
+  if (!category) {
+    throw new Error("Category is not defined");
+  }
+  let seedValue = seedRange.seedStart;
+  for (const line of category) {
+    const { source, destination, range } = getSDR(line);
+    seedValue = validateCategoryLineWithSeedRange(
+      seedRange,
+      { source, destination, range },
+    );
+  }
+  return seedValue;
+}
+
 export function resolveSeedsRange(seeds: number[]) {
   const seedRanges = [];
   for (let i = 0; i < seeds.length; i += 2) {
