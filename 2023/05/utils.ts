@@ -42,3 +42,11 @@ export function validateFullCategory(category: CategoryLine, seedValue: number) 
   }
   return seedValue;
 }
+
+export function resolveSeedsRange(seeds: number[]) {
+  const seedRanges = [];
+  for (let i = 0; i < seeds.length; i += 2) {
+    seedRanges.push([seeds[i], seeds[i + 1]]);
+  }
+  return seedRanges.map(([start, range]) => ({ start, range }));
+}
