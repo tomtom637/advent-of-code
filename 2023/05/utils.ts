@@ -2,7 +2,7 @@ import { exampleInput as input } from "./inputs.ts";
 
 type Input = typeof input;
 type Categories = Omit<Input, "seeds">;
-type CategoryLine = Partial<Categories>[keyof Categories];
+type CategoryLine = Categories[keyof Categories];
 
 /** Is at range */
 export function isAtRange(value: number, startAt: number, range: number) {
@@ -22,7 +22,7 @@ export function isAtSeedRange(
 }
 
 /** Calculate Range */
-export function resolveStartPointDistance(value: number, startAt: number) {
+export function getRange(value: number, startAt: number) {
   return value - startAt;
 }
 
@@ -40,7 +40,7 @@ export function validateCategoryLine(
   }
 ) {
   if (isAtRange(seedValue, source, range)) {
-    return destination + resolveStartPointDistance(seedValue, source);
+    return destination + getRange(seedValue, source);
   }
   return seedValue;
 }
@@ -64,14 +64,16 @@ export function validateCategoryLineWithSeedRange(
     range: number;
   }
 ) {
-  if (isAtSeedRange(seedStart, seedRange, source, range)) {
-    for (let i = seedStart; i < seedStart + seedRange; i++) {
-      if (isAtRange(i, source, range)) {
-        return destination + resolveStartPointDistance(i, source);
-      }
+  let result = seedStart;
+  let earlyReturn = false;
+  for (let i = seedStart; i < seedStart + seedRange; i++) {
+    if (isAtRange(i, source, range)) {
+      result = destination + getRange(i, source);
+      earlyReturn = true;
+      break;
     }
   }
-  return seedStart;
+  return { result, earlyReturn };
 }
 
 /** Get Source, Destination and Range from a line */
@@ -87,29 +89,31 @@ export function validateFullCategory(
   if (!category) {
     throw new Error("Category is not defined");
   }
+  let result = seedValue;
   for (const line of category) {
     const { source, destination, range } = getSDR(line);
-    seedValue = validateCategoryLine(seedValue, { source, destination, range });
+    if (isAtRange(seedValue, source, range)) {
+      result = validateCategoryLine(seedValue, { source, destination, range });
+      break;
+    }
   }
-  return seedValue;
+  return result;
 }
 
 export function validateFullCategoryWithSeedRange(
-  seedRange: { seedStart: number; seedRange: number },
+  seedInfo: { seedStart: number; seedRange: number; },
   category: CategoryLine,
 ) {
-  if (!category) {
-    throw new Error("Category is not defined");
-  }
-  let seedValue = seedRange.seedStart;
+  let result = seedInfo.seedStart;
   for (const line of category) {
     const { source, destination, range } = getSDR(line);
-    seedValue = validateCategoryLineWithSeedRange(
-      seedRange,
-      { source, destination, range },
-    );
+    const categoryLine = validateCategoryLineWithSeedRange(seedInfo, { source, destination, range })
+    if (categoryLine.earlyReturn) {
+      result = categoryLine.result;
+      break;
+    }
   }
-  return seedValue;
+  return result;
 }
 
 export function resolveSeedsRange(seeds: number[]) {
